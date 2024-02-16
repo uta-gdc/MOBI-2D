@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=3 uid="uid://dvsdiyb5og8cj"]
+
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_5lxqb"]
+[ext_resource type="Texture2D" uid="uid://ujfil40paj74" path="res://assets/player.png" id="1_w5ca6"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ww7jt"]
+radius = 12.0
+height = 48.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5taq0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t7tpr"]
+size = Vector2(40, 20)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_5lxqb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+light_mask = 0
+position = Vector2(12, 24)
+shape = SubResource("CapsuleShape2D_ww7jt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_w5ca6")
+centered = false
+
+[node name="JumpBufferTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="CoyoteJumpTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+light_mask = 0
+position = Vector2(12, 24)
+zoom = Vector2(2, 2)
+limit_left = 0
+limit_top = 0
+limit_right = 720
+limit_bottom = 480
+limit_smoothed = true
+
+[node name="Hammer" type="StaticBody2D" parent="."]
+position = Vector2(26, 20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hammer"]
+visible = false
+shape = SubResource("RectangleShape2D_5taq0")
+disabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Hammer"]
+
+[node name="Area2D" type="Area2D" parent="Hammer"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hammer/Area2D"]
+visible = false
+position = Vector2(-14, 0)
+shape = SubResource("RectangleShape2D_t7tpr")
+
+[connection signal="timeout" from="JumpBufferTimer" to="." method="__on_jump_buffer_timer_timeout"]
+[connection signal="timeout" from="CoyoteJumpTimer" to="." method="__on_coyote_jump_timer_timeout"]
